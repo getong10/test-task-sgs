@@ -2,11 +2,21 @@
 import { useRecordStore } from '@/app/stores/useRecordStore';
 import BaseButton from '@/shared/ui/BaseButton.vue';
 import { ref } from 'vue';
+import Notification from '@/shared/ui/Notification.vue';
 
 let records = ref(useRecordStore().getRecords())
 
+const showNotification = ref(false);
+const notificationMessage = ref('');
+
 const deleteRecord = (id: number) => {
   records.value = useRecordStore().removeRecord(id)
+  notificationMessage.value = 'Запись успешно удалена!';
+  showNotification.value = true;
+
+  setTimeout(() => {
+    showNotification.value = false;
+  }, 5000);
 }
 
 </script>
@@ -32,6 +42,7 @@ const deleteRecord = (id: number) => {
     </div>
   </div>
   <div v-else>Список сотрудников пуст</div>
+  <notification v-if="showNotification" :message="notificationMessage" />
 </template>
 
 <style scoped>
